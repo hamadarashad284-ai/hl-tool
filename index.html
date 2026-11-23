@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1e1e20">
+<title>Hamada License</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-512.png">
+<style>
+:root{--bg:#1e1e20;--surface:#262629;--surface-2:#2f2f33;--field:#1a1a1c;--border:#37373c;--border-strong:#48484e;--text:#ececef;--text-2:#babbc2;--text-3:#8e9098;
+ --accent:#8B7CFF;--accent-2:#4FD1E8;--grad:linear-gradient(100deg,#8B7CFF 0%,#6E9BF5 55%,#4FD1E8 100%);--ok:#5fd39a;--warn:#ffcc36;--danger:#ff7b72;--r:10px}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 -apple-system,BlinkMacSystemFont,"SF Arabic","Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+body{padding:max(14px,env(safe-area-inset-top)) 14px max(20px,env(safe-area-inset-bottom));max-width:560px;margin:0 auto}
+header{display:flex;align-items:center;gap:10px;margin-bottom:14px}header img{width:36px;height:36px}header h1{margin:0;font-size:19px;direction:ltr}header h1 b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+header .sp{flex:1}header button{font-size:13px}
+section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
+h2{margin:0 0 10px;font-size:16px}p{margin:0 0 10px;color:var(--text-2);font-size:13.5px}
+label{display:block;color:var(--text-3);font-size:12.5px;margin:10px 0 4px}
+input,select,textarea{width:100%;font:inherit;color:var(--text);background:var(--field);border:1px solid var(--border-strong);border-radius:8px;padding:10px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+textarea{min-height:80px;font:12px ui-monospace,Menlo,monospace;direction:ltr;word-break:break-all}
+.code{font:700 20px ui-monospace,Menlo,monospace;letter-spacing:1px;direction:ltr;text-align:center;text-transform:uppercase}
+button{font:inherit;color:var(--text);background:var(--surface-2);border:1px solid var(--border-strong);border-radius:8px;padding:10px 14px;cursor:pointer}
+button.primary{background:var(--grad);border:0;color:#fff;font-weight:700;width:100%;margin-top:12px;padding:13px}
+button.wa{background:#183426;border-color:#327c53;color:#dfffea;font-weight:700}
+.row{display:flex;gap:8px;margin-top:10px}.row>*{flex:1}
+.seg{display:flex;background:var(--field);border:1px solid var(--border);border-radius:8px;padding:3px;gap:3px}.seg button{flex:1;border:0;background:transparent;color:var(--text-2);padding:8px}.seg button.on{background:var(--surface-2);color:var(--text);box-shadow:0 0 0 1px var(--accent) inset}
+.result{border:1px solid var(--accent);background:rgba(139,124,255,.08)}
+.msg{min-height:1.2em;font-size:13px;margin-top:8px}.msg.err{color:var(--danger)}.msg.ok{color:var(--ok)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}th,td{text-align:start;padding:7px 4px;border-bottom:1px solid var(--border)}th{color:var(--text-3);font-weight:600}
+td code{direction:ltr;display:inline-block}.tag{font-size:11px;padding:1px 6px;border-radius:99px;border:1px solid var(--border-strong)}.tag.trial{color:var(--warn);border-color:rgba(255,204,54,.4)}.tag.full{color:var(--ok);border-color:rgba(95,211,154,.4)}
+.hidden{display:none!important}.small{font-size:12px;color:var(--text-3)}
+</style>
+</head>
+<body>
+<header><img src="logo.svg" alt=""><h1>Hamada <b>License</b></h1><span class="sp"></span><button id="lockBtn" class="hidden">قفل</button></header>
+
+<!-- First run: import the private key and choose a passcode -->
+<section id="setup" class="hidden">
+ <h2>إعداد أول مرة</h2>
+ <p>استورد ملف المفتاح السري <b>hamada-private-key.pem</b>، واختر رمز دخول. يُحفظ المفتاح مشفّرًا داخل هذا الجهاز فقط، ولا يُرسل إلى أي مكان.</p>
+ <label>ملف المفتاح السري</label><input type="file" id="pemFile" accept=".pem,.txt">
+ <label>أو الصق محتواه</label><textarea id="pemText" placeholder="محتوى الملف hamada-private-key.pem"></textarea>
+ <label>رمز الدخول (6 أرقام أو أكثر)</label><input type="password" id="newPass" inputmode="numeric" autocomplete="new-password">
+ <label>تأكيد الرمز</label><input type="password" id="newPass2" inputmode="numeric" autocomplete="new-password">
+ <button class="primary" id="setupBtn">حفظ وبدء الاستخدام</button><div class="msg" id="setupMsg"></div>
+</section>
+
+<!-- Unlock -->
+<section id="unlock" class="hidden">
+ <h2>أدخل رمز الدخول</h2>
+ <input type="password" id="pass" inputmode="numeric" autocomplete="current-password">
+ <button class="primary" id="unlockBtn">فتح</button><div class="msg" id="unlockMsg"></div>
+ <p class="small" style="margin-top:12px">نسيت الرمز؟ <button id="resetBtn" style="padding:4px 8px;font-size:12px">إعادة الإعداد</button> (ستحتاج إلى ملف المفتاح السري مرة أخرى)</p>
+</section>
+
+<!-- Generate -->
+<section id="gen" class="hidden">
+ <h2>مفتاح تفعيل جديد</h2>
+ <label>كود جهاز العميل</label><input id="code" class="code" placeholder="HS-XXXX-XXXX" autocapitalize="characters" autocomplete="off" spellcheck="false">
+ <div class="small" id="productHint"></div>
+ <label>اسم العميل</label><input id="name" autocomplete="off">
+ <label>رقم واتساب العميل (اختياري)</label><input id="phone" inputmode="tel" dir="ltr" placeholder="+965…" autocomplete="off">
+ <label>النوع</label>
+ <div class="seg" id="type"><button data-v="full" class="on">نسخة كاملة</button><button data-v="trial">تجريبي</button></div>
+ <div id="trialBox" class="hidden"><label>مدة التجربة بالأيام</label><input id="days" type="number" min="1" max="60" value="3"></div>
+ <button class="primary" id="genBtn">إنشاء المفتاح</button><div class="msg" id="genMsg"></div>
+</section>
+
+<section id="out" class="result hidden">
+ <h2 id="outTitle">المفتاح جاهز</h2>
+ <textarea id="key" readonly></textarea>
+ <div class="row"><button id="copyKey">نسخ المفتاح</button><button id="sendWa" class="wa">إرسال عبر واتساب</button></div>
+</section>
+
+<section id="logBox" class="hidden">
+ <div class="row" style="margin:0 0 8px;align-items:center"><h2 style="margin:0">العملاء</h2><input id="search" placeholder="بحث…" style="flex:2"><button id="exportBtn" style="flex:0 0 auto">تصدير CSV</button></div>
+ <table><thead><tr><th>العميل</th><th>الإضافة</th><th>النوع</th><th>التاريخ</th></tr></thead><tbody id="rows"></tbody></table>
+ <p class="small" id="logNote" style="margin-top:8px">السجل محفوظ على هذا الجهاز فقط.</p>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>
