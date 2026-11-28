@@ -5,7 +5,7 @@
 // the same format js/license.js verifies inside the extensions.
 (()=>{
 const $=id=>document.getElementById(id),STORE='hamada.license.v1',LOG='hamada.license.log';
-const PRODUCTS={HS:{id:'sync',name:'Hamada Sync'},HK:{id:'keys',name:'Hamada Keys'},HP:{id:'split',name:'Hamada Split'}};
+const PRODUCTS={HS:{id:'sync',name:'Hamada Sync'},HK:{id:'keys',name:'Hamada Keys'},HP:{id:'split',name:'Hamada Split'},HT:{id:'studio',name:'Hamada Studio'}};
 const enc=new TextEncoder(),dec=new TextDecoder();
 const b64u=buf=>btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 const b64=buf=>btoa(String.fromCharCode(...new Uint8Array(buf))),unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -34,7 +34,7 @@ function openApp(){show('gen','logBox');renderLog();setTimeout(()=>$('code').foc
 // ---- generate ----
 let type='full',last=null;
 function normCode(c){const s=String(c||'').toUpperCase().replace(/[^A-Z0-9]/g,'');return s.length===10?s.slice(0,2)+'-'+s.slice(2,6)+'-'+s.slice(6):null;}
-function onCode(){const c=normCode($('code').value),p=c&&PRODUCTS[c.slice(0,2)];$('productHint').textContent=c?(p?'الإضافة: '+p.name:'بداية الكود غير معروفة (HS أو HK أو HP).'):'';}
+function onCode(){const c=normCode($('code').value),p=c&&PRODUCTS[c.slice(0,2)];$('productHint').textContent=c?(p?'الإضافة: '+p.name:'بداية الكود غير معروفة (HS أو HK أو HP أو HT).'):'';}
 async function generate(){if(!signKey)return lock();const code=normCode($('code').value),p=code&&PRODUCTS[code.slice(0,2)];
  if(!code)return msg('genMsg','اكتب كود الجهاز كما أرسله العميل، مثل HS-7K2M-9QX4.');if(!p)return msg('genMsg','بداية الكود ('+code.slice(0,2)+') غير معروفة في هذه النسخة من الأداة. أغلق الصفحة وافتحها مرة أخرى للحصول على آخر تحديث.');const name=$('name').value.trim();if(!name)return msg('genMsg','اكتب اسم العميل.');
  const now=new Date(),payload={p:p.id,m:code,n:name,t:type,i:now.toISOString().slice(0,10)};
